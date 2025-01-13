@@ -22,7 +22,7 @@ for (i in allFiles) {
 
   # plot
   filename <- file.path("out", "training", "visualization", paste0(tools::file_path_sans_ext(i), ".png"))
-  png(filename, width = 480 * f, height = 600 * f, res = 72 * f, pointsize = 12)
+  png(filename, width = 480 * f, height = 600 * f, res = 72 * f, pointsize = 12, family = "serif")
   par(mfrow = c(5, 4))
   for (j in seq_len(nlyr(imager))) {
     plot(imager[[j]], axes = FALSE, legend = FALSE, mar = myMar, main = names(imager[[j]]), col = .default.pal())

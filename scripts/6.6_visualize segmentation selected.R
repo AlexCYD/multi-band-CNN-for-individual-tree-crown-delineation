@@ -8,7 +8,7 @@ newRes <- 300
 f <- newRes / 72
 
 png(file.path(file.path("out", "analysis", "delineation.png")), width = 400 * f, height = 200 * f, res = 72 * f, pointsize = 12)
-par(mfcol = c(2, 4), oma = c(0, 1, 1, 0))
+par(mfcol = c(2, 4), oma = c(0, 1, 1, 0), family = "serif")
 for (i in allFiles) {
   a <- tools::file_path_sans_ext(i)
 

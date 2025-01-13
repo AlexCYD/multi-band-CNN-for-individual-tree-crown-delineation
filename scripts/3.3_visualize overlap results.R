@@ -6,7 +6,7 @@ f <- newRes / 72
 myMar <- c(0, 0, 2, 0)
 
 # plot
-png(file.path("out", "analysis", "visualize overlap.png"), width = 480 * f, height = 250 * f, res = 72 * f, pointsize = 12)
+png(file.path("out", "analysis", "visualize overlap.png"), width = 480 * f, height = 250 * f, res = 72 * f, pointsize = 12, family = "serif")
 par(mfrow = c(2, 4))
 
 ns <- seq(0, 56, 8)
