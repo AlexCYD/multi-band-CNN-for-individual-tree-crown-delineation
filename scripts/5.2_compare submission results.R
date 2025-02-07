@@ -25,19 +25,26 @@ overall
 # 5 Weinstein_unpublished 0.71807937 0.8287778
 # 6         Weinstein2019 0.62993651 0.7976508
 
-# plot precision vs recall
-newRes <- 300
-f <- newRes / 72
-x <- overall$precision
-y <- overall$recall
+# plot
+library(ggplot2)
+library(ggrepel)
 
-png(file.path("out", "analysis", "compare submissions.png"), width = 400 * f, height = 400 * f, res = 72 * f, pointsize = 12)
-par(mar = c(4, 4, 0, 0) + 0.1, family = "serif")
-plot(x, y, xlim = c(0, 1), ylim = c(0, 1), xlab = "Precision", ylab = "Recall")
-text(x[1], y[1], submission[1], pos = 4)
-text(x[2], y[2] + 0.01, submission[2], pos = 3)
-text(x[3], y[3], submission[3], pos = 4)
-text(x[4], y[4] - 0.01, submission[4], pos = 1)
-text(x[5], y[5] + 0.005, submission[5], pos = 2)
-text(x[6], y[6] - 0.005, submission[6], pos = 2)
-dev.off()
+map_plot <- ggplot() +
+  geom_point(data = overall, aes(x = precision, y = recall), shape = 1, size = 1.5) + # Points
+  ylim(0, 1) +
+  xlim(0, 1) +
+  geom_text_repel(data = overall, vjust = 0.2, aes(x = precision, y = recall, label = submission), size = 3.8, family = "Times New Roman") + # Labels
+  labs(title = NULL, x = "Precision", y = "Recall") + 
+  theme_minimal() + # A clean theme for the map
+  theme(
+    panel.grid = element_blank(), # remove grid
+    panel.border = element_rect(color = "black", fill = NA), # Add black frame
+    axis.ticks = element_line(), # add tick
+    axis.ticks.length = unit(0.15, "cm"), # outer tick
+    axis.text = element_text(size = 11, color = "black"), # axis text
+    text = element_text(family = "Times New Roman", color = "black"),
+    plot.margin = unit(c(0, 0, 0, 0), "cm") # remove margin
+  )
+
+f <- file.path("out", "analysis", "compare submissions.png")
+ggsave(f, plot = map_plot, dpi = 300, width = 5, height = 5)

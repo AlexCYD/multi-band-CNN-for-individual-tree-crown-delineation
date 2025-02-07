@@ -12,14 +12,25 @@ dfEval$density <- dfEval$crowns / dfEval$files / (0.4 * 0.4) # crown per km^2
 df <- merge(dfEval, results$by_site, by.x = "site", by.y = "Site")
 
 # plot F1 vs tree crown density
-newRes <- 300
-f <- newRes / 72
+library(ggplot2)
+library(ggrepel)
 
-png(file.path("out", "analysis", "F1 vs crown density.png"), width = 400 * f, height = 400 * f, res = 72 * f, pointsize = 12)
-par(mar = c(4, 4, 0, 0) + 0.1, family = "serif")
-plot(df$density, df$F1score, type = "n",
-  xlab = expression(Cronws~per~km^2), ylab = "F1-score",
-  ylim = c(0, 0.5), xlim = c(0, 1000)
-)
-text(df$density, df$F1score, df$site)
-dev.off()
+map_plot <- ggplot() +
+  geom_point(data = df, aes(x = density, y = F1score), shape = 1, size = 1.5) + # Points
+  ylim(0, 0.5) +
+  xlim(0, 1000) +
+  geom_text_repel(data = df, vjust = 0.2, aes(x = density, y = F1score, label = site), size = 3.8, family = "Times New Roman") + # Labels
+  labs(title = NULL, x = expression("Cronws per km"^2), y = "F1-score") + 
+  theme_minimal() + # A clean theme for the map
+  theme(
+    panel.grid = element_blank(), # remove grid
+    panel.border = element_rect(color = "black", fill = NA), # Add black frame
+    axis.ticks = element_line(), # add tick
+    axis.ticks.length = unit(0.15, "cm"), # outer tick
+    axis.text = element_text(size = 11, color = "black"), # axis text
+    text = element_text(family = "Times New Roman", color = "black"),
+    plot.margin = unit(c(0, 0, 0, 0), "cm") # remove margin
+  )
+
+f <- file.path("out", "analysis", "F1 vs crown density.png")
+ggsave(f, plot = map_plot, dpi = 300, width = 5, height = 5)

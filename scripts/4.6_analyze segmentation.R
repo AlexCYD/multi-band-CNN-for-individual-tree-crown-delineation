@@ -44,14 +44,26 @@ F1score <- 2 * precision * recall / (precision + recall)
 F1score
 # [1] 0.3905923
 
-# plot precision vs recall
-newRes <- 300
-f <- newRes / 72
+# plot precision vs recall 
+library(ggplot2)
+library(ggrepel)
 
-png(file.path("out", "analysis", "evaluation per site.png"), width = 400 * f, height = 400 * f, res = 72 * f, pointsize = 12)
-par(mar = c(4, 4, 0, 0) + 0.1, family = "serif")
-plot(results$by_site$precision, results$by_site$recall, type = "n",
-  xlab = "Precision", ylab = "Recall", ylim = c(0, 0.65), xlim = c(0, 0.65)
-)
-text(results$by_site$precision, results$by_site$recall, results$by_site$Site)
-dev.off()
+map_plot <- ggplot() +
+  geom_point(data = results$by_site, aes(x = precision, y = recall), shape = 1, size = 1.5) + # Points
+  ylim(0, 0.65) +
+  xlim(0, 0.65) +
+  geom_text_repel(data = results$by_site, vjust = 0.2, aes(x = precision, y = recall, label = Site), size = 3.8, family = "Times New Roman") + # Labels
+  labs(title = NULL, x = "Precision", y = "Recall") + 
+  theme_minimal() + # A clean theme for the map
+  theme(
+    panel.grid = element_blank(), # remove grid
+    panel.border = element_rect(color = "black", fill = NA), # Add black frame
+    axis.ticks = element_line(), # add tick
+    axis.ticks.length = unit(0.15, "cm"), # outer tick
+    axis.text = element_text(size = 11, color = "black"), # axis text
+    text = element_text(family = "Times New Roman", color = "black"),
+    plot.margin = unit(c(0, 0, 0, 0), "cm") # remove margin
+  )
+
+f <- file.path("out", "analysis", "evaluation per site.png")
+ggsave(f, plot = map_plot, dpi = 300, width = 5, height = 5)

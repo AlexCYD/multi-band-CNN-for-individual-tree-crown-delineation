@@ -24,8 +24,8 @@ fontface[dfSites$tiles != "-"] <- "bold"
 
 map_plot <- ggplot() +
   geom_sf(data = shp_file, fill = NA, color = "grey") + # Map layer
-  geom_point(data = dfNeon, aes(x = lon, y = lat), color = "black", size = 1) + # Points layer
-  geom_text_repel(data = dfNeon, aes(x = lon, y = lat, label = site), color = "black", size = 3, fontface = fontface, vjust = 1, family = "serif") + # Labels
+  geom_point(data = dfNeon, aes(x = lon, y = lat), shape = 1, size = 1) + # Points layer
+  geom_text_repel(data = dfNeon, aes(x = lon, y = lat, label = site), color = "black", size = 4, fontface = fontface, vjust = 0.1, family = "Times New Roman") + # Labels
   labs(title = NULL, x = NULL, y = NULL) + # Remove labs
   theme_minimal() + # A clean theme for the map
   theme(
@@ -33,10 +33,10 @@ map_plot <- ggplot() +
     panel.border = element_rect(color = "black", fill = NA), # Add black frame
     axis.ticks = element_line(), # add tick
     axis.ticks.length = unit(-0.15, "cm"), # inner tick
-    axis.text = element_text(family = "serif"), # tick label
+    axis.text = element_text(family = "Times New Roman", size = 10, color = "black"), # tick label
     plot.margin = unit(c(0, 0, 0, 0), "cm") # remove margin
   )
 
 # save map
-f <- file.path("out", "analysis", "sites.png")
+f <- file.path("out", "analysis", "sites3.png")
 ggsave(f, plot = map_plot, dpi = 300, width = 6, height = 4)
